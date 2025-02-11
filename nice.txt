@@ -1,0 +1,27 @@
+What do  I need to implement ? 
+ get_next_line
+
+ What does get_next_line do ?
+    -Attempts to read from a file.
+    -If succesfull reads until /n is found
+    -Returns the line found
+
+Exceptions :
+    -If failed to read from a file returns null
+    -If read error returns null
+    
+
+
+
+Plan:
+
+ 1 -> Open file specified by fd. ( read will attempt to open and read from a file if existing)
+ 2 -> 2 ways to do it. read until /n or read the whole file in 1 go.
+ 3 -> Parse the data read.
+ 4 -> Save and return data read.
+ 5 -> Look for remaining data read (because we read in chunks)
+ 6 -> Save remaining data .
+ 7 -> Repeat from step 1
+
+ Start with basic frame of function get_next_line()
+ 
