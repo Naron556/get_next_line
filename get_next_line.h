@@ -6,7 +6,7 @@
 /*   By: arkadiusz <arkadiusz@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 17:21:26 by aoperacz          #+#    #+#             */
-/*   Updated: 2025/02/12 00:53:31 by arkadiusz        ###   ########.fr       */
+/*   Updated: 2025/02/19 23:07:49 by arkadiusz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define GET_NEXT_LINE_H
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
+# elif BUFFER_SIZE > 1000000
+#  undef BUFFER_SIZE
+#  define BUFFER_SIZE 1000000
 # endif
 # include <fcntl.h>
 # include <limits.h>

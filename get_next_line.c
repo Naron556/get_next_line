@@ -6,7 +6,7 @@
 /*   By: arkadiusz <arkadiusz@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 17:22:33 by aoperacz          #+#    #+#             */
-/*   Updated: 2025/02/19 21:34:23 by arkadiusz        ###   ########.fr       */
+/*   Updated: 2025/02/19 23:12:00 by arkadiusz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,13 @@ char	*read_data(int fd)
 		temp = ft_free(buffer, buff);
 		if (!temp)
 			return (free(buff), NULL);
+		free (buff);
 		buff = temp;
-		if (ft_strchr(buffer, '\n'))
+		if (ft_strchr(buff, '\n'))
 			break ;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		if (bytes_read == -1)
+			return (free (buff), NULL);
 	}
 	return (buff);
 }
@@ -111,6 +114,8 @@ char	*get_next_line(int fd)
 	temp = ft_strjoin(saved_data, data);
 	free(saved_data);
 	free(data);
+	if (!temp)
+		return (NULL);
 	saved_data = temp;
 	if (!saved_data || *saved_data == '\0')
 	{
