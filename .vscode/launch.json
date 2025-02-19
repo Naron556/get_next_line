@@ -4,14 +4,14 @@
             "name": "My debug homeboy",
             "type": "cppdbg",
             "request": "launch",
-            "program": "enter program name, for example ${workspaceFolder}/a.out",
+            "program": "${workspaceFolder}/a.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "preLaunchTask": "C/C++: gcc build active file",
+            "preLaunchTask": "Compile Project with CC",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",

@@ -3,32 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aoperacz <aoperacz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arkadiusz <arkadiusz@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 17:22:27 by aoperacz          #+#    #+#             */
-/*   Updated: 2025/02/03 15:48:31 by aoperacz         ###   ########.fr       */
+/*   Updated: 2025/02/19 17:42:04 by arkadiusz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	unsigned long	i;
 	unsigned long	j;
 	char			*res;
 
 	i = 0;
-	res = (char *)malloc ((ft_strlen(s1) + ft_strlen(s2) + 1));
+	res = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (!res)
 		return (NULL);
-	while (s1[i])
+	while (s1 != NULL && s1[i])
 	{
 		res[i] = s1[i];
 		i++;
 	}
 	j = 0;
-	while (s2[j])
+	while (s2 != NULL && s2[j])
 	{
 		res[i] = s2[j];
 		i++;
@@ -86,6 +86,8 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
+	if (s == NULL)
+		return (0);
 	while (s[i] != 0)
 	{
 		i++;
