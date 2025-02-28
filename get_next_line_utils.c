@@ -6,7 +6,7 @@
 /*   By: arkadiusz <arkadiusz@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 17:22:27 by aoperacz          #+#    #+#             */
-/*   Updated: 2025/02/19 17:42:04 by arkadiusz        ###   ########.fr       */
+/*   Updated: 2025/02/28 19:39:19 by arkadiusz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char	*ft_strjoin(char *s1, char *s2)
 
 	i = 0;
 	res = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!res)
+	if (res == NULL)
 		return (NULL);
 	while (s1 != NULL && s1[i])
 	{
