@@ -6,138 +6,89 @@
 /*   By: arkadiusz <arkadiusz@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 17:22:33 by aoperacz          #+#    #+#             */
-/*   Updated: 2025/02/28 19:39:12 by arkadiusz        ###   ########.fr       */
+/*   Updated: 2025/03/07 18:29:13 by arkadiusz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int		g_error = 0;
-
-char	*ft_free(char *buffer, char *buff)
-{
-	char	*temp;
-
-	temp = ft_strjoin(buff, buffer);
-	return (temp);
-}
-
-char	*read_data(int fd)
+int	get_chunk(int fd, char **data)
 {
 	char	buffer[BUFFER_SIZE + 1];
-	ssize_t	bytes_read;
-	char	*buff;
 	char	*temp;
+	int		bytes_read;
 
-	buff = NULL;
+	temp = NULL;
 	bytes_read = read(fd, buffer, BUFFER_SIZE);
+	buffer[bytes_read] = '\0';
 	if (bytes_read == -1)
 	{
-		g_error = 1;
-		return (NULL);
+		free(*data);
+		return (bytes_read);
 	}
 	while (bytes_read > 0)
 	{
-		buffer[bytes_read] = '\0';
-		temp = ft_free(buffer, buff);
-		if (!temp)
-			return (free(buff), NULL);
-		free(buff);
-		buff = temp;
-		if (ft_strchr(buff, '\n'))
+		temp = *data;
+		*data = ft_strjoin(temp, buffer);
+		free(temp);
+		if (ft_strchr(*data, '\n'))
 			break ;
 		bytes_read = read(fd, buffer, BUFFER_SIZE);
+		buffer[bytes_read] = '\0';
 		if (bytes_read == -1)
-			return (free(buff), NULL);
+			return (free(*data), bytes_read);
 	}
-	return (buff);
+	return (bytes_read);
 }
 
-char	*find_line(char *data)
+char	*return_line_and_leftover(char *data, char **leftover)
 {
-	int		i;
 	char	*line;
+	int		itr;
 
-	if (!data || *data == '\0')
+	line = ft_strjoin(*leftover, data);
+	free(data);
+	free(*leftover);
+	data = line;
+	if (data == NULL)
 		return (NULL);
-	i = 0;
-	while (data[i] != '\n' && data[i])
-		i++;
-	if (data[i] == '\n')
-		i++;
-	line = ft_calloc(i + 1, sizeof(char));
-	if (line == NULL)
-		return (NULL);
-	i = 0;
-	while (data[i] != '\n' && data[i])
+	itr = 0;
+	while (data[itr] != '\0' && data[itr] != '\n')
+		itr++;
+	if (data[itr] == '\n')
+		itr++;
+	line = ft_strdup(data, itr);
+	*leftover = ft_strdup(data + itr, ft_strlen(data + itr));
+	if (**leftover == '\0')
 	{
-		line[i] = data[i];
-		i++;
+		free(*leftover);
+		*leftover = NULL;
 	}
-	if (data[i] == '\n')
-		line[i++] = '\n';
+	free(data);
 	return (line);
-}
-
-char	*find_remaining_data(char *data)
-{
-	ssize_t	i;
-	ssize_t	j;
-	char	*leftover;
-
-	if (!data)
-		return (NULL);
-	j = 0;
-	i = 0;
-	while (data[i] != '\n' && data[i] != '\0')
-		i++;
-	if (data[i] == '\0')
-		return (NULL);
-	i++;
-	leftover = (char *)malloc((ft_strlen(data) - i + 1) * sizeof(char));
-	if (leftover == NULL)
-		return (NULL);
-	while (data[i + j])
-	{
-		leftover[j] = data[i + j];
-		j++;
-	}
-	leftover[j] = '\0';
-	return (leftover);
 }
 
 char	*get_next_line(int fd)
 {
 	char		*line;
 	char		*data;
-	static char	*saved_data;
 	char		*temp;
+	static char	*leftover;
+	int			bytes_read;
 
-	data = read_data(fd);
-	if (data == NULL && saved_data == NULL)
-		return (NULL);
-	if (g_error)
+	data = NULL;
+	temp = ft_strdup(leftover, ft_strlen(leftover));
+	bytes_read = get_chunk(fd, &data);
+	if (bytes_read == -1 && leftover != NULL)
 	{
-		g_error = 0;
-		free(saved_data);
-		saved_data = NULL;
+		free(leftover);
+		free(temp);
+		leftover = NULL;
 		return (NULL);
 	}
-	temp = ft_strjoin(saved_data, data);
-	free(saved_data);
-	free(data);
-	if (!temp)
-		return (NULL);
-	saved_data = temp;
-	if (!saved_data || *saved_data == '\0')
-	{
-		free(saved_data);
-		saved_data = NULL;
-		return (NULL);
-	}
-	line = find_line(saved_data);
-	temp = find_remaining_data(saved_data);
-	free(saved_data);
-	saved_data = temp;
+	line = return_line_and_leftover(data, &temp);
+	if (leftover != NULL)
+		free(leftover);
+	leftover = temp;
 	return (line);
 }

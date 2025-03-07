@@ -6,7 +6,7 @@
 /*   By: arkadiusz <arkadiusz@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 17:21:26 by aoperacz          #+#    #+#             */
-/*   Updated: 2025/02/19 23:07:49 by arkadiusz        ###   ########.fr       */
+/*   Updated: 2025/03/07 18:29:10 by arkadiusz        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,9 @@
 # include <unistd.h>
 
 char	*get_next_line(int fd);
-char	*ft_strjoin(char *s1, char *s2);
+char	*ft_strjoin(const char *left, const char *right);
 char	*ft_strchr(const char *s, int c);
-void	ft_bzero(void *s, size_t n);
-void	*ft_calloc(size_t nmemb, size_t size);
-size_t	ft_strlen(const char *s);
+char	*ft_strdup(const char *sauce, int num_char);
+int		ft_strlen(const char *str);
 
 #endif
